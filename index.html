@@ -1,0 +1,1599 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>High Agency OS | 雙語人生操作系統</title>
+  <style>
+    :root {
+      --ink: #17201b;
+      --muted: #5f6c64;
+      --line: #d9e2dc;
+      --paper: #fbfcf8;
+      --panel: #ffffff;
+      --green: #0b7a5a;
+      --lime: #b7d64b;
+      --blue: #2e6fd8;
+      --gold: #d99a22;
+      --rose: #c64b5f;
+      --shadow: 0 18px 50px rgba(31, 52, 43, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+    }
+
+    .side {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px 18px;
+      border-right: 1px solid var(--line);
+      background: #f4f8f0;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #1b5948;
+      background: var(--green);
+      color: white;
+      font-weight: 900;
+      border-radius: 8px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.15;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      padding: 10px 11px;
+      border-radius: 8px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav button.active {
+      background: white;
+      border-color: var(--line);
+      color: var(--ink);
+      box-shadow: 0 8px 24px rgba(31, 52, 43, .08);
+    }
+
+    .side-tools {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+    }
+
+    .tool-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .toggle button {
+      border: 0;
+      background: transparent;
+      padding: 7px 9px;
+      color: var(--muted);
+    }
+
+    .toggle button.active {
+      background: var(--green);
+      color: white;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      min-height: 84vh;
+      padding: 42px clamp(18px, 4vw, 52px) 28px;
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(320px, 520px);
+      gap: 32px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(115deg, rgba(255,255,255,.86), rgba(255,255,255,.58)),
+        radial-gradient(circle at 82% 12%, rgba(183, 214, 75, .42), transparent 34%),
+        linear-gradient(155deg, #f9fbf5 0%, #edf5ed 60%, #e8f0fb 100%);
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .08em;
+      margin: 0 0 12px;
+    }
+
+    .hero h2 {
+      font-size: clamp(38px, 6vw, 82px);
+      line-height: .94;
+      margin: 0 0 18px;
+      max-width: 820px;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      color: #36443b;
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.65;
+      margin-bottom: 22px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      min-height: 42px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 750;
+    }
+
+    .btn.primary {
+      border-color: var(--green);
+      background: var(--green);
+      color: white;
+    }
+
+    .btn.icon {
+      width: 36px;
+      height: 36px;
+      min-height: 36px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .visual {
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .visual canvas {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / .86;
+    }
+
+    .formula {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .formula span {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      min-height: 52px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8px;
+      font-size: 12px;
+      color: #34433a;
+      font-weight: 760;
+    }
+
+    section {
+      padding: 36px clamp(18px, 4vw, 52px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(25px, 3vw, 40px);
+      line-height: 1.1;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.65;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 10px 24px rgba(31, 52, 43, .06);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .zh, .en {
+      line-height: 1.55;
+    }
+
+    .en {
+      color: #314c75;
+      margin-top: 6px;
+    }
+
+    .en-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: start;
+      margin-top: 8px;
+    }
+
+    .speak {
+      border: 1px solid #cbd7e8;
+      color: var(--blue);
+      background: #f5f8ff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .dashboard {
+      grid-template-columns: 1.35fr .9fr;
+      align-items: stretch;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfdf9;
+      min-height: 94px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 22px;
+      margin: 7px 0 4px;
+    }
+
+    .bar {
+      height: 8px;
+      background: #e8eee8;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      width: var(--w);
+      background: linear-gradient(90deg, var(--green), var(--lime));
+    }
+
+    .checklist {
+      display: grid;
+      gap: 9px;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--green);
+    }
+
+    .score-ring {
+      width: min(100%, 260px);
+      aspect-ratio: 1;
+      margin: 0 auto 12px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--green) calc(var(--score) * 1%), #e5ece6 0);
+      position: relative;
+    }
+
+    .score-ring::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .score-ring span {
+      position: relative;
+      z-index: 1;
+      font-size: 42px;
+      font-weight: 900;
+    }
+
+    .engine {
+      counter-reset: step;
+    }
+
+    .step {
+      position: relative;
+      padding-left: 54px;
+      min-height: 158px;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 16px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--ink);
+      color: white;
+      font-weight: 900;
+    }
+
+    .step textarea, .coach textarea {
+      width: 100%;
+      min-height: 74px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      background: #fbfdf9;
+      color: var(--ink);
+    }
+
+    .ability-toolbar, .graph-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+      font-weight: 720;
+    }
+
+    .chip.active {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+
+    .ability-card {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .ability-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .ability-index {
+      display: inline-grid;
+      place-items: center;
+      min-width: 42px;
+      height: 30px;
+      border-radius: 8px;
+      background: #eef5ee;
+      color: var(--green);
+      font-weight: 850;
+      font-size: 12px;
+    }
+
+    .ability-detail {
+      border: 1px solid var(--line);
+      background: #fbfdf9;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .ability-detail h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .ability-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .ability-mini {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 9px;
+      min-height: 84px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .ability-mini strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .ability-count {
+      color: var(--muted);
+      font-weight: 760;
+      padding: 8px 0;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+    }
+
+    .levels button {
+      border: 1px solid var(--line);
+      background: #f8faf6;
+      border-radius: 6px;
+      padding: 6px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .levels button.active {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .coach {
+      grid-template-columns: 360px minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .path button {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 8px;
+      min-height: 44px;
+      padding: 10px;
+      text-align: left;
+      margin-bottom: 8px;
+    }
+
+    .path button.active {
+      border-color: var(--green);
+      box-shadow: inset 4px 0 0 var(--green);
+    }
+
+    .diag-result {
+      border: 1px solid #c9ddcf;
+      background: #f2f8ef;
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .graph-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+      gap: 14px;
+    }
+
+    #knowledgeCanvas, #radarCanvas {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .element-catalog-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin: 18px 0 12px;
+    }
+
+    .element-catalog-head h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .element-count {
+      color: var(--muted);
+      font-weight: 780;
+    }
+
+    .element-catalog {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .element-card {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: left;
+      min-height: 132px;
+      display: grid;
+      align-content: start;
+      gap: 7px;
+      color: var(--ink);
+    }
+
+    .element-card.active {
+      border-color: var(--green);
+      box-shadow: inset 4px 0 0 var(--green), 0 10px 24px rgba(31, 52, 43, .08);
+    }
+
+    .element-card strong {
+      font-size: 15px;
+    }
+
+    .element-card .en {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .element-badge {
+      width: max-content;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: #eef5ee;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 820;
+    }
+
+    .element-modules {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .module {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px;
+      background: #fbfdf9;
+      font-size: 13px;
+      text-align: left;
+      color: var(--ink);
+    }
+
+    .module.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: white;
+    }
+
+    .module-detail {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfdf9;
+    }
+
+    .module-detail h4 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .detail-block {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+      min-height: 96px;
+    }
+
+    .detail-block strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .practice-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #34433a;
+      line-height: 1.55;
+    }
+
+    .challenge-day {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .date-box {
+      width: 74px;
+      min-height: 74px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: white;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .log-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .log-item {
+      border-left: 4px solid var(--green);
+      padding: 8px 10px;
+      background: #fff;
+      border-radius: 0 8px 8px 0;
+      color: #3c493f;
+      font-size: 13px;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1080px) {
+      .app { grid-template-columns: 1fr; }
+      .side {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .hero, .dashboard, .coach, .graph-wrap { grid-template-columns: 1fr; }
+      .grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .element-catalog { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .side { padding: 16px; }
+      .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero { min-height: auto; padding-top: 28px; }
+      .formula, .metric-grid, .grid.cols-2, .grid.cols-3, .grid.cols-4, .element-modules, .ability-detail-grid, .element-catalog {
+        grid-template-columns: 1fr;
+      }
+      .section-head { display: block; }
+      .step { padding-left: 0; padding-top: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="brand">
+        <div class="mark">HA</div>
+        <div>
+          <h1>High Agency OS</h1>
+          <p>人生操作系統 / Operating System</p>
+        </div>
+      </div>
+      <nav class="nav" id="nav"></nav>
+      <div class="side-tools">
+        <div class="tool-row">
+          <span>語言顯示</span>
+          <div class="toggle" aria-label="Language mode">
+            <button class="active" data-lang="both">雙語</button>
+            <button data-lang="en">EN</button>
+          </div>
+        </div>
+        <button class="btn" id="stopVoice" type="button">■ 停止發音</button>
+        <button class="btn" id="resetDay" type="button">↺ 重置今日</button>
+      </div>
+    </aside>
+
+    <main>
+      <header class="hero" id="home">
+        <div>
+          <p class="eyebrow">No AI tokens. Fixed flow. Real agency.</p>
+          <h2>High Agency Operating System</h2>
+          <p class="hero-copy zh">這不是學習 APP、背單字 APP、課程平台或聊天 AI。這是一套把學生從「等待答案」帶到「自己定義問題、設計解法、驗證、更新並創造價值」的人生操作系統。</p>
+          <div class="en-line">
+            <p class="hero-copy en">This is not a learning app, a vocabulary app, a course platform, or a chat AI. It is an operating system for turning students into self-directed learners, AI collaborators, problem solvers, and value creators.</p>
+            <button class="speak" type="button" title="Speak English" data-speak="This is not a learning app, a vocabulary app, a course platform, or a chat AI. It is an operating system for turning students into self-directed learners, AI collaborators, problem solvers, and value creators.">▶</button>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="#dashboard">今日啟動</a>
+            <button class="btn" id="speakMission" type="button">▶ Speak Mission</button>
+          </div>
+        </div>
+        <div class="visual">
+          <canvas id="heroCanvas" width="980" height="820" aria-label="High Agency knowledge graph visualization"></canvas>
+          <div class="formula">
+            <span>問題定義<br>Problem</span>
+            <span>思考模型<br>Models</span>
+            <span>行動速度<br>Action</span>
+            <span>回饋更新<br>Update</span>
+          </div>
+        </div>
+      </header>
+
+      <section id="dashboard">
+        <div class="section-head">
+          <div>
+            <h2>High Agency Dashboard</h2>
+            <p>每天不是看內容，而是完成「思考、提問、閱讀、分析、驗證、更新、創造、分享」的閉環。</p>
+          </div>
+          <button class="btn primary" id="completeAll" type="button">完成今日核心</button>
+        </div>
+        <div class="grid dashboard">
+          <div class="card">
+            <h3>今日任務 / Today</h3>
+            <div class="checklist" id="dailyChecklist"></div>
+          </div>
+          <div class="card">
+            <h3>High Agency Score</h3>
+            <div class="score-ring" id="scoreRing"><span id="scoreText">0</span></div>
+            <canvas id="radarCanvas" width="800" height="500" aria-label="能力雷達圖"></canvas>
+          </div>
+        </div>
+        <div class="grid cols-4" id="metrics" style="margin-top:14px"></div>
+      </section>
+
+      <section id="engine">
+        <div class="section-head">
+          <div>
+            <h2>High Agency Engine</h2>
+            <p>固定十步流程。所有問題都先進入操作流程，而不是等待別人給答案。</p>
+          </div>
+          <button class="btn" id="saveEngine" type="button">儲存流程</button>
+        </div>
+        <div class="grid cols-2 engine" id="engineSteps"></div>
+      </section>
+
+      <section id="coach">
+        <div class="section-head">
+          <div>
+            <h2>High Agency Coach</h2>
+            <p>完全不用 AI 的固定引導。遇到混亂時，先停一下，把問題拆回可控制的下一步。</p>
+          </div>
+        </div>
+        <div class="grid coach">
+          <div class="card">
+            <h3>互動導航 / Interactive Navigation</h3>
+            <div class="path" id="diagnosisPath"></div>
+            <div class="diag-result" id="diagResult"></div>
+          </div>
+          <div class="card">
+            <h3>八問固定流程 / Eight Fixed Prompts</h3>
+            <div id="coachPrompts"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="abilities">
+        <div class="section-head">
+          <div>
+            <h2>100 Core Abilities</h2>
+            <p>每項能力都有 Lv1 到 Lv5。你可以每天升級一點點，把能力變成可追蹤、可複利的資產。</p>
+          </div>
+        </div>
+        <div class="ability-toolbar" id="abilityFilters"></div>
+        <div class="grid cols-4" id="abilityGrid"></div>
+      </section>
+
+      <section id="challenge">
+        <div class="section-head">
+          <div>
+            <h2>365-Day Challenge</h2>
+            <p>每天十分鐘：一句智慧、一個能力、一個挑戰、一個反思、一個 AI 技巧、一篇閱讀、一個行動。</p>
+          </div>
+          <button class="btn" id="nextChallenge" type="button">明日預覽</button>
+        </div>
+        <div class="grid cols-3" id="challengeGrid"></div>
+      </section>
+
+      <section id="knowledge">
+        <div class="section-head">
+          <div>
+            <h2>Life Knowledge Graph</h2>
+            <p>1000 個人生認知元素，分成十大元素庫；每個元素都有 18 個固定模組，並與其他元素形成知識網路。</p>
+          </div>
+        </div>
+        <div class="graph-toolbar" id="libraryFilters"></div>
+        <div class="graph-wrap">
+          <canvas id="knowledgeCanvas" width="980" height="620" aria-label="Life knowledge graph"></canvas>
+          <div class="card" id="elementPanel"></div>
+        </div>
+        <div class="element-catalog-head">
+          <div>
+            <h3>1000 Element Catalog</h3>
+            <p class="small">完整呈現 10 大元素庫，每庫 100 個人生認知元素。點任何元素可切換右側 18 模組內容。</p>
+          </div>
+          <span class="element-count" id="elementCount"></span>
+        </div>
+        <div class="element-catalog" id="elementCatalog"></div>
+      </section>
+
+      <section id="update">
+        <div class="section-head">
+          <div>
+            <h2>Daily Update Engine</h2>
+            <p>事件 → 覺察 → 分析 → 理解 → 更新模型 → 小行動 → 回饋 → 修正 → 能力 → 人格 → 人生升級。</p>
+          </div>
+          <button class="btn primary" id="addLog" type="button">加入今日更新</button>
+        </div>
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>今日更新 / Today's Update</h3>
+            <textarea id="updateText" placeholder="今天發生了什麼？你更新了哪個模型？下一個最小行動是什麼？"></textarea>
+          </div>
+          <div class="card">
+            <h3>更新紀錄 / Update Log</h3>
+            <div class="log-list" id="logList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (q, root = document) => root.querySelector(q);
+    const $$ = (q, root = document) => [...root.querySelectorAll(q)];
+    const store = {
+      get(key, fallback) {
+        try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+        catch { return fallback; }
+      },
+      set(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+    };
+
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const navItems = [
+      ["home", "首頁", "Home"], ["dashboard", "儀表板", "Dashboard"],
+      ["engine", "十步引擎", "Engine"], ["coach", "教練", "Coach"],
+      ["abilities", "能力樹", "Abilities"], ["challenge", "挑戰", "Challenge"],
+      ["knowledge", "知識圖譜", "Graph"], ["update", "每日更新", "Update"]
+    ];
+
+    const dailyTasks = [
+      ["今日任務", "Today Mission", "Define one real problem before seeking answers."],
+      ["今日能力", "Today Ability", "Practice first-principles thinking for ten minutes."],
+      ["今日挑戰", "Today Challenge", "Take the smallest useful action within twenty minutes."],
+      ["今日閱讀", "Today Reading", "Read one page and extract one usable model."],
+      ["今日AI", "Today AI", "Use AI as leverage, not as a replacement for judgment."],
+      ["今日反思", "Today Reflection", "Compare your prediction with what actually happened."],
+      ["今日更新", "Today Update", "Upgrade one belief, rule, or habit."],
+      ["今日金句", "Quote", "Agency grows when you act before certainty arrives."],
+      ["今日問題", "Question", "What problem am I still avoiding defining?"],
+      ["今日目標", "Goal", "Create one small piece of value before the day ends."]
+    ];
+
+    const metrics = [
+      ["主動性", "Initiative", 71], ["思考力", "Thinking", 68], ["閱讀力", "Reading", 59],
+      ["專注力", "Focus", 64], ["AI能力", "AI Skill", 77], ["決策力", "Decision", 62],
+      ["執行力", "Execution", 73], ["反思力", "Reflection", 69], ["幸福感", "Well-being", 66],
+      ["健康", "Health", 61], ["睡眠", "Sleep", 58], ["完成率", "Completion", 0]
+    ];
+
+    const engineSteps = [
+      ["定義問題", "Define the Problem", "真正要解決的是什麼？真正目標是什麼？誰會受益？", "What are we really solving? What is the real goal? Who benefits?"],
+      ["第一性原理", "First Principles", "哪些是真正事實？哪些是假設？哪些可以改變？哪些不能改變？", "What are the facts? What are assumptions? What can change? What cannot change?"],
+      ["系統分析", "System Analysis", "有哪些節點？有哪些限制？最大槓桿在哪？", "What are the nodes? What are the constraints? Where is the highest leverage?"],
+      ["AI協作", "AI Collaboration", "哪些交給 AI？哪些自己做？如何讓 AI 放大能力？", "What should AI handle? What must I do myself? How can AI amplify my ability?"],
+      ["行動設計", "Action Design", "今天最小可以開始的一步？最快驗證方法？", "What is the smallest step I can start today? What is the fastest way to test it?"],
+      ["小規模實驗", "Small Experiment", "先做。不要等完美。", "Act first. Do not wait for perfect conditions."],
+      ["回饋", "Feedback", "成功原因？失敗原因？預測差距？", "Why did it work? Why did it fail? Where did prediction differ from reality?"],
+      ["更新模型", "Update the Model", "今天修正了什麼？哪個想法升級？", "What did I correct today? Which idea became sharper?"],
+      ["能力累積", "Ability Compounding", "增加哪些能力？哪些可遷移？", "Which abilities improved? Which skills can transfer?"],
+      ["教會別人", "Teach Someone", "如果教國中生，你會怎麼說？", "If you had to teach this to a middle school student, how would you explain it?"]
+    ];
+
+    const coachPrompts = [
+      ["真正發生什麼？", "What actually happened?"],
+      ["哪些是事實？", "What are the facts?"],
+      ["哪些只是你的猜測？", "What is only your interpretation?"],
+      ["你真正想達成什麼？", "What do you really want to achieve?"],
+      ["最大障礙是什麼？", "What is the biggest obstacle?"],
+      ["哪些可以控制？", "What can you control?"],
+      ["今天最小的一步？", "What is the smallest step today?"],
+      ["完成後再回來。", "Come back after completing it."]
+    ];
+
+    const diagNodes = [
+      { id: "procrastination", zh: "一直拖延？", en: "Always procrastinating?", result: "拖延 OS / Procrastination OS" },
+      { id: "fear", zh: "怕失敗？", en: "Afraid of failure?", result: "韌性 OS / Resilience OS" },
+      { id: "first-step", zh: "不知道第一步？", en: "Unsure about the first step?", result: "行動 OS / Action OS" },
+      { id: "planning", zh: "缺少規劃？", en: "Missing a plan?", result: "執行 OS / Execution OS" },
+      { id: "focus", zh: "容易分心？", en: "Easily distracted?", result: "專注 OS / Focus OS" }
+    ];
+
+    const abilitySeeds = [
+      ["Problem Definition","問題定義","Thinking"], ["First Principles","第一性原理","Thinking"],
+      ["Systems Thinking","系統思考","Thinking"], ["Model Thinking","模型思考","Thinking"],
+      ["Reading Skill","閱讀能力","Learning"], ["Comprehension","理解能力","Learning"],
+      ["Questioning","提問能力","Thinking"], ["Writing","寫作能力","Communication"],
+      ["Decision Quality","決策能力","Decision"], ["Prediction","預測能力","Decision"],
+      ["Focus","專注力","Execution"], ["Execution","執行力","Execution"],
+      ["Self-Discipline","自律","Execution"], ["Resilience","韌性","Inner"],
+      ["Creativity","創造力","Creation"], ["AI Collaboration","AI協作","AI"],
+      ["Communication","溝通","Communication"], ["Expression","表達","Communication"],
+      ["Leadership","領導","Influence"], ["Influence","影響力","Influence"],
+      ["Value Creation","價值創造","Creation"], ["Lifelong Learning","終身學習","Learning"]
+    ];
+    const extraAbilityNames = [
+      ["Attention Design","注意力設計"],["Time Leverage","時間槓桿"],["Energy Management","能量管理"],["Sleep Discipline","睡眠紀律"],
+      ["Health Literacy","健康素養"],["Emotional Labeling","情緒命名"],["Cognitive Reframing","認知重構"],["Calm Under Pressure","壓力冷靜"],
+      ["Experiment Design","實驗設計"],["Feedback Seeking","尋求回饋"],["Metric Thinking","指標思考"],["Opportunity Sensing","機會感知"],
+      ["Resourcefulness","資源整合"],["Search Skill","搜尋能力"],["Information Filtering","資訊過濾"],["Note Making","筆記能力"],
+      ["Concept Mapping","概念建圖"],["Memory Design","記憶設計"],["Teaching Skill","教學能力"],["Storytelling","故事力"],
+      ["Negotiation","談判"],["Collaboration","協作"],["Conflict Repair","衝突修復"],["Trust Building","建立信任"],
+      ["Goal Design","目標設計"],["Habit Formation","習慣養成"],["Review Cadence","週期復盤"],["Risk Thinking","風險思考"],
+      ["Financial Literacy","財務素養"],["Business Sense","商業感"],["Product Sense","產品感"],["User Empathy","用戶同理"],
+      ["Market Reading","市場閱讀"],["Strategic Thinking","策略思考"],["Constraint Solving","限制求解"],["Prioritization","優先排序"],
+      ["Taste Building","品味建立"],["Design Sense","設計感"],["Data Literacy","資料素養"],["Prompt Design","提示設計"],
+      ["Automation Thinking","自動化思維"],["Tool Fluency","工具熟練"],["Ethical Judgment","倫理判斷"],["Self-Awareness","自我覺察"],
+      ["Identity Design","身份設計"],["Purpose Clarification","目的澄清"],["Courage","勇氣"],["Patience","耐心"],
+      ["Compounding","複利思維"],["Reflection","反思力"],["Recovery","恢復力"],["Deep Work","深度工作"],
+      ["Context Switching","情境切換"],["Learning Transfer","學習遷移"],["Analogical Thinking","類比思考"],["Abstraction","抽象能力"],
+      ["Decomposition","拆解能力"],["Synthesis","整合能力"],["Verification","驗證能力"],["Error Correction","錯誤修正"],
+      ["Decision Journal","決策紀錄"],["Scenario Planning","情境規劃"],["Tasteful Simplicity","簡化能力"],["Consistency","一致性"],
+      ["Public Sharing","公開分享"],["Community Building","社群建立"],["Mentorship","指導他人"],["Self-Testing","自我測試"],
+      ["Curiosity","好奇心"],["Initiative","主動性"],["Ownership","主人翁精神"],["Boundary Setting","界線設定"],
+      ["Kind Candor","善意直率"],["Listening","聆聽"],["Observation","觀察力"],["Attention to Detail","細節力"],
+      ["Long-Term Thinking","長期思考"],["Action Bias","行動偏好"]
+    ];
+    const categoryMap = ["Thinking","Learning","Execution","AI","Decision","Communication","Creation","Influence","Inner"];
+    const abilities = [...abilitySeeds, ...extraAbilityNames.map((a, i) => [a[0], a[1], categoryMap[i % categoryMap.length]])].slice(0, 100);
+
+    const libraries = [
+      ["Emotion", "情緒元素", ["焦慮","恐懼","控制感","自我效能","壓力","平靜","羞恥","勇氣","安全感","幸福"]],
+      ["Thinking", "思維元素", ["第一性原理","系統","假設","模型","偏誤","證據","槓桿","框架","抽象","驗證"]],
+      ["Health", "健康元素", ["睡眠","呼吸","飲食","運動","恢復","壓力管理","能量","姿勢","光照","節律"]],
+      ["AI", "AI元素", ["提示","代理","自動化","資料","評估","工作流","限制","協作","輸出品質","安全"]],
+      ["Education", "教育元素", ["閱讀","筆記","理解","教學","測驗","遷移","記憶","專題","提問","回饋"]],
+      ["Relationship", "關係元素", ["信任","界線","聆聽","同理","衝突","承諾","合作","表達","修復","支持"]],
+      ["Business", "商業元素", ["價值","產品","市場","客戶","定價","銷售","品牌","流程","策略","增長"]],
+      ["Wealth", "財富元素", ["現金流","資產","風險","投資","預算","複利","技能資本","時間","槓桿","選擇權"]],
+      ["Life", "生命元素", ["目的","身份","選擇","責任","死亡","自由","愛","意義","成長","貢獻"]],
+      ["Wisdom", "高維智慧元素", ["謙卑","耐心","空性","整體","取捨","節制","真實","慈悲","洞察","超越"]]
+    ];
+
+    const moduleNames = ["定義","本質","生成機制","常見迷思","壞模型","好模型","高維理解","人生教練","今日行動","七天挑戰","三十天養成","能力提升","真實案例","金句","心智圖","相關元素","延伸閱讀","能力等級"];
+    const knowledge = libraries.flatMap(([en, zh, seeds]) =>
+      Array.from({ length: 100 }, (_, i) => {
+        const seed = seeds[i % seeds.length];
+        return {
+          id: `${en}-${i + 1}`,
+          libraryEn: en,
+          libraryZh: zh,
+          zh: i < seeds.length ? seed : `${seed} ${Math.floor(i / seeds.length) + 1}`,
+          en: i < seeds.length ? translateSeed(seed) : `${translateSeed(seed)} ${Math.floor(i / seeds.length) + 1}`,
+          links: seeds.filter(x => x !== seed).slice(0, 6)
+        };
+      })
+    );
+
+    const challengeBase = [
+      ["今日一句智慧", "Wisdom", "等待清楚才開始，通常會錯過真正的清楚。", "Clarity often appears after movement, not before it."],
+      ["今日一個能力", "Ability", "問題定義", "Problem definition"],
+      ["今日一個挑戰", "Challenge", "把一個模糊煩惱改寫成可驗證問題。", "Rewrite one vague worry as a testable question."],
+      ["今日一個反思", "Reflection", "今天哪個判斷和現實不同？", "Which judgment differed from reality today?"],
+      ["今日一個AI技巧", "AI Skill", "先寫出你的判斷，再請 AI 挑漏洞。", "Write your own judgment first, then ask AI to find gaps."],
+      ["今日一個閱讀", "Reading", "讀一頁，萃取一個可用模型。", "Read one page and extract one usable model."],
+      ["今日一個行動", "Action", "二十分鐘內做出第一版。", "Create version one within twenty minutes."],
+      ["今日完成打卡", "Check-in", "完成後記錄回饋與下一步。", "After completion, record feedback and the next step."]
+    ];
+
+    function translateSeed(seed) {
+      const pairs = {
+        "焦慮":"Anxiety","恐懼":"Fear","控制感":"Sense of control","自我效能":"Self-efficacy","壓力":"Stress","平靜":"Calm","羞恥":"Shame","勇氣":"Courage","安全感":"Safety","幸福":"Happiness",
+        "第一性原理":"First principles","系統":"System","假設":"Assumption","模型":"Model","偏誤":"Bias","證據":"Evidence","槓桿":"Leverage","框架":"Framework","抽象":"Abstraction","驗證":"Verification",
+        "睡眠":"Sleep","呼吸":"Breathing","飲食":"Nutrition","運動":"Exercise","恢復":"Recovery","壓力管理":"Stress management","能量":"Energy","姿勢":"Posture","光照":"Light exposure","節律":"Rhythm",
+        "提示":"Prompting","代理":"Agents","自動化":"Automation","資料":"Data","評估":"Evaluation","工作流":"Workflow","限制":"Constraints","協作":"Collaboration","輸出品質":"Output quality","安全":"Safety",
+        "閱讀":"Reading","筆記":"Note making","理解":"Comprehension","教學":"Teaching","測驗":"Testing","遷移":"Transfer","記憶":"Memory","專題":"Project","提問":"Questioning","回饋":"Feedback",
+        "信任":"Trust","界線":"Boundaries","聆聽":"Listening","同理":"Empathy","衝突":"Conflict","承諾":"Commitment","合作":"Cooperation","表達":"Expression","修復":"Repair","支持":"Support",
+        "價值":"Value","產品":"Product","市場":"Market","客戶":"Customer","定價":"Pricing","銷售":"Sales","品牌":"Brand","流程":"Process","策略":"Strategy","增長":"Growth",
+        "現金流":"Cash flow","資產":"Assets","風險":"Risk","投資":"Investment","預算":"Budget","複利":"Compounding","技能資本":"Skill capital","時間":"Time","選擇權":"Options",
+        "目的":"Purpose","身份":"Identity","選擇":"Choice","責任":"Responsibility","死亡":"Mortality","自由":"Freedom","愛":"Love","意義":"Meaning","成長":"Growth","貢獻":"Contribution",
+        "謙卑":"Humility","耐心":"Patience","空性":"Emptiness","整體":"Wholeness","取捨":"Trade-off","節制":"Temperance","真實":"Truth","慈悲":"Compassion","洞察":"Insight","超越":"Transcendence"
+      };
+      return pairs[seed] || seed;
+    }
+
+    function speak(text) {
+      if (!("speechSynthesis" in window)) {
+        alert("此瀏覽器不支援語音播放。請改用 Chrome、Edge 或 Safari。");
+        return;
+      }
+      speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      utter.rate = 0.92;
+      utter.pitch = 1;
+      const voice = speechSynthesis.getVoices().find(v => /en[-_](US|GB|AU)/i.test(v.lang));
+      if (voice) utter.voice = voice;
+      speechSynthesis.speak(utter);
+    }
+
+    function bilingual(zh, en) {
+      return `<p class="zh">${zh}</p><div class="en-line"><p class="en">${en}</p><button class="speak" type="button" title="Speak English" data-speak="${escapeAttr(en)}">▶</button></div>`;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+    }
+    function escapeAttr(s) { return escapeHtml(s).replace(/\n/g, " "); }
+
+    function renderNav() {
+      $("#nav").innerHTML = navItems.map(([id, zh, en]) =>
+        `<button type="button" data-target="${id}"><span>${zh}</span><small>${en}</small></button>`
+      ).join("");
+      $$("#nav button").forEach(btn => {
+        btn.addEventListener("click", () => document.getElementById(btn.dataset.target).scrollIntoView());
+      });
+    }
+
+    function renderChecklist() {
+      const checked = store.get(`ha-checks-${todayKey}`, {});
+      $("#dailyChecklist").innerHTML = dailyTasks.map(([zh, en, speakText], i) => `
+        <label class="check">
+          <input type="checkbox" data-check="${i}" ${checked[i] ? "checked" : ""}>
+          <span><strong>${zh}</strong><br><small>${en}</small></span>
+          <button class="speak" type="button" data-speak="${escapeAttr(speakText)}" title="Speak English">▶</button>
+        </label>
+      `).join("");
+      $$("#dailyChecklist input").forEach(input => input.addEventListener("change", () => {
+        const data = store.get(`ha-checks-${todayKey}`, {});
+        data[input.dataset.check] = input.checked;
+        store.set(`ha-checks-${todayKey}`, data);
+        updateScore();
+      }));
+      updateScore();
+    }
+
+    function updateScore() {
+      const checked = store.get(`ha-checks-${todayKey}`, {});
+      const completed = Object.values(checked).filter(Boolean).length;
+      const score = Math.round(completed / dailyTasks.length * 100);
+      $("#scoreText").textContent = score;
+      $("#scoreRing").style.setProperty("--score", score);
+      metrics[11][2] = score;
+      renderMetrics();
+      drawRadar();
+    }
+
+    function renderMetrics() {
+      $("#metrics").innerHTML = metrics.map(([zh, en, value]) => `
+        <div class="metric">
+          <span class="small">${zh} / ${en}</span>
+          <strong>${value}</strong>
+          <div class="bar" style="--w:${value}%"><i></i></div>
+        </div>
+      `).join("");
+    }
+
+    function renderEngine() {
+      const answers = store.get("ha-engine", {});
+      $("#engineSteps").innerHTML = engineSteps.map(([zh, en, zhd, end], i) => `
+        <article class="card step">
+          <h3>${zh}</h3>
+          ${bilingual(zhd, end)}
+          <textarea data-engine="${i}" placeholder="寫下你的答案...">${escapeHtml(answers[i] || "")}</textarea>
+        </article>
+      `).join("");
+    }
+
+    function renderCoach() {
+      $("#diagnosisPath").innerHTML = diagNodes.map((n, i) => `
+        <button type="button" data-diag="${i}">${n.zh}<br><small>${n.en}</small></button>
+      `).join("");
+      $$("#diagnosisPath button").forEach(btn => btn.addEventListener("click", () => {
+        $$("#diagnosisPath button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const n = diagNodes[Number(btn.dataset.diag)];
+        $("#diagResult").innerHTML = `<strong>系統推薦：${n.result}</strong>${bilingual("先完成八問流程，再開始最小行動。", "Complete the eight prompts first, then take the smallest action.")}`;
+      }));
+      $("#diagnosisPath button").click();
+      $("#coachPrompts").innerHTML = coachPrompts.map(([zh, en], i) => `
+        <div class="card" style="margin-bottom:10px">
+          <strong>${i + 1}. ${zh}</strong>
+          <div class="en-line"><p class="en">${en}</p><button class="speak" type="button" data-speak="${escapeAttr(en)}">▶</button></div>
+          <textarea placeholder="你的回答..."></textarea>
+        </div>
+      `).join("");
+    }
+
+
+    function abilityLevelContent(en, zh, cat, level) {
+      const levelNames = {
+        1: ["命名與覺察", "Name and notice"],
+        2: ["拆解與理解", "Decompose and understand"],
+        3: ["操作與實驗", "Operate and experiment"],
+        4: ["穩定與遷移", "Stabilize and transfer"],
+        5: ["創造與教學", "Create and teach"]
+      };
+      const zhFocus = {
+        1: `能用自己的話說出「${zh}」是什麼，並在一天中辨認至少一個真實場景。`,
+        2: `能把「${zh}」拆成觸發、限制、資源、行動與回饋五個部分。`,
+        3: `能針對「${zh}」設計一個小實驗，並在 20 分鐘內完成第一版。`,
+        4: `能在不同情境重複使用「${zh}」，把它轉成穩定流程，而不是靠心情。`,
+        5: `能用「${zh}」創造價值、教會別人，並建立可複製的練習模板。`
+      };
+      const enFocus = {
+        1: `Explain ${en} in your own words and identify at least one real scene in your day.`,
+        2: `Decompose ${en} into trigger, constraint, resource, action, and feedback.`,
+        3: `Design a small experiment for ${en} and ship version one within twenty minutes.`,
+        4: `Use ${en} across different contexts as a stable process, not as a mood-dependent effort.`,
+        5: `Use ${en} to create value, teach others, and build a reusable practice template.`
+      };
+      return {
+        titleZh: `Lv${level} ${levelNames[level][0]}`,
+        titleEn: `Level ${level}: ${levelNames[level][1]}`,
+        speak: `${en}. Level ${level}. ${enFocus[level]}`,
+        blocks: [
+          ["能力定義", "Ability Definition", zhFocus[level], enFocus[level]],
+          ["通過證據", "Evidence", `你需要留下可檢查證據：一句定義、一個拆解、一個行動紀錄、一個回饋更新。`, `Leave inspectable evidence: one definition, one decomposition, one action record, and one feedback update.`],
+          ["練習任務", "Practice Task", `今天用「${zh}」處理一個真實問題，寫下：問題、假設、最小行動、結果。`, `Use ${en} on a real problem today. Write the problem, assumption, smallest action, and result.`],
+          ["輸出成果", "Output", `產出一張「${zh}能力卡」：我會在什麼情境使用、如何判斷成功、下一級要補什麼。`, `Create one ${en} ability card: when to use it, how to judge success, and what to improve next.`]
+        ],
+        summaryZh: `${cat} 類能力。Lv${level} 的重點是：${zhFocus[level]}`,
+        summaryEn: `${cat} ability. The focus of level ${level} is: ${enFocus[level]}`
+      };
+    }
+
+    function renderAbilities(filter = "All") {
+      const filters = ["All", ...new Set(abilities.map(a => a[2]))];
+      const shown = abilities.filter(a => filter === "All" || a[2] === filter);
+      $("#abilityFilters").innerHTML = [
+        `<button type="button" class="chip ${filter === "All" ? "active" : ""}" data-filter="All">顯示全部 100</button>`,
+        ...filters.filter(f => f !== "All").map(f => `<button type="button" class="chip ${f === filter ? "active" : ""}" data-filter="${f}">${f}</button>`),
+        `<span class="ability-count">目前顯示 ${shown.length}/100</span>`
+      ].join("");
+      $$("#abilityFilters button").forEach(b => b.addEventListener("click", () => renderAbilities(b.dataset.filter)));
+      const levels = store.get("ha-levels", {});
+      $("#abilityGrid").innerHTML = shown.map(([en, zh, cat]) => {
+        const id = abilities.findIndex(a => a[0] === en);
+        const level = levels[id] || 1;
+        const detail = abilityLevelContent(en, zh, cat, level);
+        return `<article class="card ability-card">
+          <div class="ability-head">
+            <div>
+              <h3>${zh}</h3>
+              <div class="en-line"><p class="en">${en}</p><button class="speak" type="button" data-speak="${escapeAttr(detail.speak)}">▶</button></div>
+              <p class="small">${cat}</p>
+            </div>
+            <span class="ability-index">#${String(id + 1).padStart(3, "0")}</span>
+          </div>
+          <div class="levels">${[1,2,3,4,5].map(n => `<button type="button" class="${n === level ? "active" : ""}" data-ability="${id}" data-level="${n}">Lv${n}</button>`).join("")}</div>
+          <div class="ability-detail">
+            <h4>${detail.titleZh}</h4>
+            ${bilingual(detail.summaryZh, detail.summaryEn)}
+            <div class="ability-detail-grid">${detail.blocks.map(([zt, et, z, e]) => `<div class="ability-mini"><strong>${zt}<br><span class="en">${et}</span></strong>${bilingual(z, e)}</div>`).join("")}</div>
+          </div>
+        </article>`;
+      }).join("");
+      $$("#abilityGrid .levels button").forEach(b => b.addEventListener("click", () => {
+        const data = store.get("ha-levels", {});
+        data[b.dataset.ability] = Number(b.dataset.level);
+        store.set("ha-levels", data);
+        renderAbilities(filter);
+      }));
+      applyLangMode(currentLangMode);
+    }
+
+    function renderChallenge(offset = 0) {
+      const day = ((Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000) + offset - 1) % 365) + 1;
+      $("#challengeGrid").innerHTML = challengeBase.map(([zh, en, contentZh, contentEn], i) => `
+        <article class="card challenge-day">
+          <div class="date-box">Day<br>${day}</div>
+          <div>
+            <h3>${zh}</h3>
+            ${bilingual(contentZh, contentEn)}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    let selectedElementId = "Emotion-1";
+
+    function renderKnowledge(library = "All") {
+      const filters = [["All", "顯示全部 1000"], ...libraries.map(([en, zh]) => [en, zh])];
+      $("#libraryFilters").innerHTML = filters.map(([en, zh]) => `<button type="button" class="chip ${en === library ? "active" : ""}" data-lib="${en}">${zh}</button>`).join("");
+      $$("#libraryFilters button").forEach(b => b.addEventListener("click", () => renderKnowledge(b.dataset.lib)));
+      const items = library === "All" ? knowledge : knowledge.filter(k => k.libraryEn === library);
+      const selected = items.find(k => k.id === selectedElementId) || items[0];
+      selectedElementId = selected.id;
+      $("#elementCount").textContent = `目前顯示 ${items.length}/1000`;
+      drawKnowledge(items.slice(0, 80));
+      renderElement(selected);
+      renderElementCatalog(items, selectedElementId, library);
+      applyLangMode(currentLangMode);
+    }
+
+    function renderElementCatalog(items, activeId, library) {
+      $("#elementCatalog").innerHTML = items.map((el, i) => `
+        <button type="button" class="element-card ${el.id === activeId ? "active" : ""}" data-element="${el.id}" data-lib="${library}">
+          <span class="element-badge">#${String(knowledge.findIndex(k => k.id === el.id) + 1).padStart(4, "0")} · ${el.libraryZh}</span>
+          <strong>${el.zh}</strong>
+          <p class="en">${el.en}</p>
+          <span class="small">18 modules · ${el.links.slice(0, 3).join(" / ")}</span>
+        </button>
+      `).join("");
+      $$("#elementCatalog [data-element]").forEach(btn => btn.addEventListener("click", () => {
+        const el = knowledge.find(k => k.id === btn.dataset.element);
+        selectedElementId = el.id;
+        renderElement(el);
+        $$("#elementCatalog .element-card").forEach(card => card.classList.toggle("active", card.dataset.element === el.id));
+        applyLangMode(currentLangMode);
+        document.getElementById("elementPanel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }));
+    }
+
+    let currentLangMode = "both";
+
+    function moduleContent(el, module) {
+      const linksZh = el.links.join("、");
+      const linksEn = el.links.map(translateSeed).join(", ");
+      const templates = {
+        "定義": ["把概念釘牢", "Define the concept", `「${el.zh}」是在${el.libraryZh}中用來理解行動與選擇的核心節點。它不是抽象名詞，而是一個可以被觀察、拆解、訓練與更新的能力單位。`, `${el.en} is a core node in the ${el.libraryEn} library. Treat it as an observable, trainable, and updatable unit of agency, not as a vague idea.`],
+        "本質": ["看見底層結構", "See the underlying structure", `${el.zh}的本質是人在限制、目標與回饋之間形成的穩定模式。抓到本質，就能從情緒反應轉向系統操作。`, `The essence of ${el.en} is the stable pattern formed between constraints, goals, and feedback. Once you see the essence, you can move from reaction to operation.`],
+        "生成機制": ["它如何產生", "How it is generated", `${el.zh}通常由觸發事件、過去模型、身體狀態、環境線索與即時解讀共同生成。改變其中一個節點，就可能改變整個結果。`, `${el.en} is usually generated by triggers, prior models, body state, environmental cues, and real-time interpretation. Change one node and the whole outcome can shift.`],
+        "常見迷思": ["避開錯誤理解", "Avoid common myths", `常見迷思是把${el.zh}當成固定人格或命運。High Agency 的看法是：它是一個可被命名、測量、練習與迭代的系統變數。`, `A common myth is treating ${el.en} as fixed personality or fate. The high-agency view is that it is a system variable that can be named, measured, practiced, and iterated.`],
+        "壞模型": ["低自主性的解釋", "Low-agency model", `壞模型會說：「我就是這樣」、「沒辦法」、「等有人救我」。它讓人停在受害者位置，失去定義問題與設計下一步的能力。`, `A poor model says: this is just who I am, nothing can be done, or someone must rescue me. It keeps agency outside the self.`],
+        "好模型": ["可操作的解釋", "Operational model", `好模型會問：我能控制什麼？哪個假設可驗證？今天最小行動是什麼？它把${el.zh}變成可執行流程。`, `A good model asks: what can I control, which assumption can be tested, and what is the smallest action today? It turns ${el.en} into an executable process.`],
+        "高維理解": ["升級視角", "Higher-dimensional view", `高維理解不是壓抑${el.zh}，而是看見它與${linksZh}的連動。當你看見網路，就不會只修單點。`, `Higher-dimensional understanding does not suppress ${el.en}; it sees how it connects with ${linksEn}. Once you see the network, you stop fixing only one point.`],
+        "人生教練": ["固定教練問題", "Coach prompts", `先停一下，不要急著找答案。把${el.zh}放進八問流程：事實、猜測、目標、障礙、可控項、最小一步、完成、回來更新。`, `Pause before chasing answers. Put ${el.en} through the eight prompts: facts, interpretations, goal, obstacle, controllables, smallest step, completion, and update.`],
+        "今日行動": ["今天就做", "Do it today", `今天選一個與${el.zh}相關的小場景，做一個 10 分鐘實驗。重點不是完美，而是讓現實提供回饋。`, `Choose one small scene related to ${el.en} today and run a ten-minute experiment. The point is not perfection; the point is feedback from reality.`],
+        "七天挑戰": ["七天微訓練", "Seven-day micro challenge", `連續七天追蹤${el.zh}：每天記錄觸發、想法、身體感受、行動、結果與一個修正。第七天整理出你的個人操作手冊。`, `Track ${el.en} for seven days: trigger, thought, body signal, action, result, and one correction. On day seven, write your personal operating manual.`],
+        "三十天養成": ["三十天複利", "Thirty-day compounding", `三十天養成法：每週只升級一個變數。第一週覺察，第二週設計環境，第三週行動實驗，第四週教會別人。`, `Thirty-day formation: upgrade one variable per week. Week one: awareness. Week two: environment design. Week three: action experiments. Week four: teach someone.`],
+        "能力提升": ["轉成能力資產", "Turn it into ability", `${el.zh}提升後會帶動問題定義、決策品質、行動速度與回饋更新。把它記入能力樹，設定 Lv1 到 Lv5 的下一級證據。`, `Improving ${el.en} strengthens problem definition, decision quality, action speed, and feedback updates. Put it into the ability tree and define evidence for the next level.`],
+        "真實案例": ["生活情境", "Real-life case", `案例：學生遇到卡住的任務時，不再說「我不會」，而是把${el.zh}拆成事實、假設、限制、資源與下一步，二十分鐘內完成第一版。`, `Case: when a student gets stuck, they stop saying I cannot do this. They decompose ${el.en} into facts, assumptions, constraints, resources, and the next step, then ship version one within twenty minutes.`],
+        "金句": ["一句記住", "Memorable quote", `${el.zh}不是等待狀態改變才行動，而是在行動中更新狀態。`, `${el.en} is not waiting for your state to change before acting; it is updating your state through action.`],
+        "心智圖": ["節點網路", "Mind map", `${el.zh} → ${linksZh} → 行動 → 回饋 → 模型更新 → 能力升級。把每個箭頭都當成可測試假設。`, `${el.en} -> ${linksEn} -> action -> feedback -> model update -> ability growth. Treat every arrow as a testable hypothesis.`],
+        "相關元素": ["連結其他節點", "Connected elements", `${el.zh}不是孤立元素。它與${linksZh}互相影響；學會連結，就能找到最大槓桿點。`, `${el.en} is not isolated. It interacts with ${linksEn}; learning the connections helps you find the highest leverage point.`],
+        "延伸閱讀": ["閱讀路線", "Reading path", `閱讀時不要只摘錄句子。請用三層筆記：一句定義、一個模型、一個今天可驗證的行動。`, `When reading, do not only collect quotes. Use three-layer notes: one definition, one model, and one action you can test today.`],
+        "能力等級": ["Lv1 到 Lv5", "Level path", `Lv1 能命名；Lv2 能觀察；Lv3 能設計行動；Lv4 能穩定更新；Lv5 能教會別人並創造價值。`, `Level 1: name it. Level 2: observe it. Level 3: design action. Level 4: update consistently. Level 5: teach others and create value.`]
+      };
+      const t = templates[module] || templates["定義"];
+      return {
+        titleZh: t[0], titleEn: t[1], zh: t[2], en: t[3],
+        blocks: [
+          ["核心問題", "Core Question", `我現在如何定義${el.zh}？這個定義會讓我更有行動力，還是更被動？`, `How am I defining ${el.en} right now? Does this definition make me more active or more passive?`],
+          ["操作步驟", "Operating Steps", `命名現象 → 分離事實與猜測 → 找可控變數 → 做最小實驗 → 記錄回饋 → 更新模型。`, `Name the pattern -> separate facts from interpretations -> find controllables -> run a small experiment -> record feedback -> update the model.`],
+          ["檢核標準", "Quality Check", `如果內容不能導向一個今天可做的行動，它還不是 High Agency 模型。`, `If the content cannot lead to an action today, it is not yet a high-agency model.`],
+          ["輸出格式", "Output Format", `用一句話寫下：我以為____，但現實顯示____，所以下一步我會____。`, `Write one sentence: I assumed ____, reality showed ____, so my next step is ____.`]
+        ],
+        practices: [
+          `今天：針對${el.zh}完成一次 10 分鐘實驗。`,
+          `七天：每天記錄一次觸發、行動與回饋。`,
+          `三十天：把最有效的一步變成固定流程並教會一個人。`
+        ]
+      };
+    }
+
+    function renderElement(el, activeModule = moduleNames[0]) {
+      const detail = moduleContent(el, activeModule);
+      $("#elementPanel").innerHTML = `
+        <h3>${el.zh}</h3>
+        ${bilingual(`${el.libraryZh}中的認知元素，連結：${el.links.join("、")}。`, `${el.en} is a cognitive element in the ${el.libraryEn} library. It connects to ${el.links.map(translateSeed).join(", ")}.`)}
+        <p class="small">資料庫規模：1000 elements / 10 libraries / 18 modules each</p>
+        <div class="element-modules">${moduleNames.map(m => `<button type="button" class="module ${m === activeModule ? "active" : ""}" data-module="${m}">${m}</button>`).join("")}</div>
+        <div class="module-detail">
+          <h4>${activeModule}｜${detail.titleZh}</h4>
+          ${bilingual(detail.zh, detail.en)}
+          <div class="detail-grid">${detail.blocks.map(([zhTitle,enTitle,zh,en]) => `<div class="detail-block"><strong>${zhTitle}<br><span class="en">${enTitle}</span></strong>${bilingual(zh,en)}</div>`).join("")}</div>
+          <ul class="practice-list">${detail.practices.map(x => `<li>${x}</li>`).join("")}</ul>
+        </div>
+      `;
+      $$("#elementPanel [data-module]").forEach(btn => btn.addEventListener("click", () => renderElement(el, btn.dataset.module)));
+      applyLangMode(currentLangMode);
+    }
+
+    function renderLogs() {
+      const logs = store.get("ha-logs", []);
+      $("#logList").innerHTML = logs.length ? logs.slice().reverse().map(l => `<div class="log-item"><strong>${l.date}</strong><br>${escapeHtml(l.text)}</div>`).join("") : `<p class="small">尚未建立更新紀錄。</p>`;
+    }
+
+    function applyLangMode(mode) {
+      currentLangMode = mode;
+      document.body.dataset.lang = mode;
+      $$(".zh").forEach(el => el.classList.toggle("hidden", mode === "en"));
+      $$(".toggle button").forEach(b => b.classList.toggle("active", b.dataset.lang === mode));
+    }
+
+    function drawHero() {
+      const c = $("#heroCanvas");
+      const ctx = c.getContext("2d");
+      const w = c.width, h = c.height;
+      ctx.clearRect(0,0,w,h);
+      const nodes = [
+        [490,390,74,"High\nAgency", "#0b7a5a"],
+        [250,210,45,"Problem", "#2e6fd8"], [710,210,45,"Models", "#d99a22"],
+        [235,570,45,"Action", "#c64b5f"], [725,570,45,"Update", "#6e7d1e"],
+        [490,130,36,"AI", "#263a7b"], [490,660,36,"Value", "#376b35"]
+      ];
+      ctx.lineWidth = 3;
+      for (let i = 1; i < nodes.length; i++) {
+        ctx.strokeStyle = "rgba(23,32,27,.18)";
+        ctx.beginPath(); ctx.moveTo(nodes[0][0], nodes[0][1]); ctx.lineTo(nodes[i][0], nodes[i][1]); ctx.stroke();
+      }
+      nodes.forEach(([x,y,r,label,color]) => {
+        ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle = color; ctx.fill();
+        ctx.fillStyle = "white"; ctx.font = `800 ${r > 50 ? 30 : 22}px Inter, sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        label.split("\n").forEach((line, i, arr) => ctx.fillText(line, x, y + (i - (arr.length - 1) / 2) * 32));
+      });
+    }
+
+    function drawRadar() {
+      const c = $("#radarCanvas");
+      const ctx = c.getContext("2d");
+      const w = c.width, h = c.height;
+      ctx.clearRect(0,0,w,h);
+      const labels = metrics.slice(0, 8);
+      const cx = w/2, cy = h/2 + 8, r = Math.min(w,h) * .34;
+      ctx.strokeStyle = "#d9e2dc";
+      ctx.fillStyle = "#5f6c64";
+      ctx.font = "18px Inter, sans-serif";
+      for (let ring=1; ring<=4; ring++) {
+        ctx.beginPath();
+        labels.forEach((_, i) => {
+          const a = -Math.PI/2 + i/labels.length*Math.PI*2;
+          const rr = r * ring / 4;
+          const x = cx + Math.cos(a)*rr, y = cy + Math.sin(a)*rr;
+          i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+        });
+        ctx.closePath(); ctx.stroke();
+      }
+      ctx.beginPath();
+      labels.forEach(([zh,en,val], i) => {
+        const a = -Math.PI/2 + i/labels.length*Math.PI*2;
+        const rr = r * val / 100;
+        const x = cx + Math.cos(a)*rr, y = cy + Math.sin(a)*rr;
+        i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+        const lx = cx + Math.cos(a)*(r+48), ly = cy + Math.sin(a)*(r+30);
+        ctx.fillText(en, lx - 28, ly);
+      });
+      ctx.closePath();
+      ctx.fillStyle = "rgba(11,122,90,.22)";
+      ctx.strokeStyle = "#0b7a5a";
+      ctx.lineWidth = 3;
+      ctx.fill(); ctx.stroke();
+    }
+
+    function drawKnowledge(items) {
+      const c = $("#knowledgeCanvas");
+      const ctx = c.getContext("2d");
+      const w = c.width, h = c.height;
+      ctx.clearRect(0,0,w,h);
+      const center = { x: w/2, y: h/2 };
+      const pts = items.map((it, i) => {
+        const a = i/items.length*Math.PI*2;
+        const rr = 190 + (i % 3) * 42;
+        return { ...it, x: center.x + Math.cos(a)*rr, y: center.y + Math.sin(a)*rr };
+      });
+      ctx.strokeStyle = "rgba(23,32,27,.14)";
+      pts.forEach(p => {
+        ctx.beginPath(); ctx.moveTo(center.x, center.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+      });
+      ctx.beginPath(); ctx.arc(center.x, center.y, 58, 0, Math.PI*2); ctx.fillStyle = "#17201b"; ctx.fill();
+      ctx.fillStyle = "white"; ctx.font = "800 22px Inter, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("Life", center.x, center.y - 12); ctx.fillText("Graph", center.x, center.y + 16);
+      pts.forEach((p, i) => {
+        ctx.beginPath(); ctx.arc(p.x, p.y, 26, 0, Math.PI*2); ctx.fillStyle = i % 2 ? "#2e6fd8" : "#0b7a5a"; ctx.fill();
+        ctx.fillStyle = "white"; ctx.font = "12px Inter, sans-serif"; ctx.fillText(p.en.split(" ")[0].slice(0,8), p.x, p.y);
+      });
+      c.onclick = e => {
+        const rect = c.getBoundingClientRect();
+        const x = (e.clientX - rect.left) * c.width / rect.width;
+        const y = (e.clientY - rect.top) * c.height / rect.height;
+        const hit = pts.find(p => Math.hypot(p.x - x, p.y - y) < 34);
+        if (hit) renderElement(hit);
+      };
+    }
+
+    function attachEvents() {
+      document.addEventListener("click", e => {
+        const btn = e.target.closest("[data-speak]");
+        if (btn) speak(btn.dataset.speak);
+      });
+      $("#stopVoice").addEventListener("click", () => speechSynthesis.cancel());
+      $("#speakMission").addEventListener("click", () => speak("Human outcomes equal problem definition, thinking models, AI collaboration, decision quality, action speed, feedback updates, and continuous compounding."));
+      $$(".toggle button").forEach(b => b.addEventListener("click", () => applyLangMode(b.dataset.lang)));
+      $("#completeAll").addEventListener("click", () => {
+        store.set(`ha-checks-${todayKey}`, Object.fromEntries(dailyTasks.map((_, i) => [i, true])));
+        renderChecklist();
+      });
+      $("#resetDay").addEventListener("click", () => {
+        localStorage.removeItem(`ha-checks-${todayKey}`);
+        renderChecklist();
+      });
+      $("#saveEngine").addEventListener("click", () => {
+        const data = {};
+        $$("[data-engine]").forEach(t => data[t.dataset.engine] = t.value);
+        store.set("ha-engine", data);
+        alert("已儲存 High Agency Engine。");
+      });
+      let challengeOffset = 0;
+      $("#nextChallenge").addEventListener("click", () => renderChallenge(++challengeOffset));
+      $("#addLog").addEventListener("click", () => {
+        const text = $("#updateText").value.trim();
+        if (!text) return;
+        const logs = store.get("ha-logs", []);
+        logs.push({ date: todayKey, text });
+        store.set("ha-logs", logs);
+        $("#updateText").value = "";
+        renderLogs();
+      });
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            $$("#nav button").forEach(b => b.classList.toggle("active", b.dataset.target === entry.target.id));
+          }
+        });
+      }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
+      navItems.forEach(([id]) => observer.observe(document.getElementById(id)));
+    }
+
+    function init() {
+      renderNav();
+      renderChecklist();
+      renderMetrics();
+      renderEngine();
+      renderCoach();
+      renderAbilities();
+      renderChallenge();
+      renderKnowledge();
+      renderLogs();
+      drawHero();
+      drawRadar();
+      attachEvents();
+      applyLangMode("both");
+      window.addEventListener("resize", () => { drawHero(); drawRadar(); renderKnowledge($(".graph-toolbar .active")?.dataset.lib || "All"); });
+    }
+
+    init();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
